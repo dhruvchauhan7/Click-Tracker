@@ -51,7 +51,8 @@ Environment variables (Vite)
 # VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
 
 
-Deployment
+#Deployment
+
 A) API → Cloud Run
 
 # from miniapp/api
@@ -70,7 +71,7 @@ gcloud run deploy $SERVICE \
   --max-instances=1 \
   --set-env-vars FIREBASE_PROJECT_ID=$PROJECT_ID
 
-Test:
+#Test:
 
 curl -s https://<SERVICE_URL>/ | jq
 # Get a fresh ID token in the web app console: await window._testGetToken(true)
@@ -84,7 +85,8 @@ npm run build
 firebase deploy --only hosting
 
 
-Firestore Security Rules
+#Firestore Security Rules
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -95,13 +97,13 @@ service cloud.firestore {
 }
 
 
-Backend Security Notes
+#Backend Security Notes
 
-Auth check: Every protected route uses Authorization: Bearer <Firebase ID token> and verifies with Firebase Admin (verifyIdToken). Tokens are audience/issuer bound to the Firebase project.
-Public routes: / (and optionally /healthz) are public for health checks. Business routes like /me, /ping require a valid token.
-CORS: cors({ origin: true }) for simplicity in demo; restrict to your Hosting origin in production if desired.
-Least access: Firestore rules isolate per-user access to usage/{uid}.
-Secrets: No service account keys are committed. Cloud Run uses ADC (workload identity).
+*Auth check: Every protected route uses Authorization: Bearer <Firebase ID token> and verifies with Firebase Admin (verifyIdToken). Tokens are audience/issuer bound to the Firebase project.
+*Public routes: / (and optionally /healthz) are public for health checks. Business routes like /me, /ping require a valid token.
+*CORS: cors({ origin: true }) for simplicity in demo; restrict to your Hosting origin in production if desired.
+*Least access: Firestore rules isolate per-user access to usage/{uid}.
+*Secrets: No service account keys are committed. Cloud Run uses ADC (workload identity).
 
 
 
