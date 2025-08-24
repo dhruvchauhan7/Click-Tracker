@@ -19,43 +19,31 @@ Tiny full-stack app demonstrating frontend, auth, tracking, backend, and deploym
 
 ---
 
-## Architecture
-
-React (Vite) ──> Firebase Auth (client) ──> ID token
-│ │
-├─ Firestore (usage/{uid}) <────┘ (client SDK)
-└─ fetch /me,/ping (Cloud Run) with Authorization: Bearer <ID_TOKEN>
-│
-└─ Express + Firebase Admin verifies ID token
-
-
----
-
 ## Local Development
 
-# Frontend
+### Frontend
 cd miniapp/web
 npm install
 
-# Backend
+### Backend
 cd ../api
 npm install
 npm run dev
 
 Environment variables (Vite)
 
-# VITE_FIREBASE_API_KEY=...
-# VITE_FIREBASE_AUTH_DOMAIN=click-tracker-eb57a.firebaseapp.com
-# VITE_FIREBASE_PROJECT_ID=click-tracker-eb57a
-# VITE_FIREBASE_APP_ID=...
-# VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
+### VITE_FIREBASE_API_KEY=...
+### VITE_FIREBASE_AUTH_DOMAIN=click-tracker-eb57a.firebaseapp.com
+### VITE_FIREBASE_PROJECT_ID=click-tracker-eb57a
+### VITE_FIREBASE_APP_ID=...
+### VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
 
 
-#Deployment
+## Deployment
 
 A) API → Cloud Run
 
-# from miniapp/api
+## from miniapp/api
 PROJECT_ID=$(gcloud config get-value project)
 REGION=us-central1
 SERVICE=click-tracker-api
@@ -71,21 +59,21 @@ gcloud run deploy $SERVICE \
   --max-instances=1 \
   --set-env-vars FIREBASE_PROJECT_ID=$PROJECT_ID
 
-#Test:
+##Test:
 
 curl -s https://<SERVICE_URL>/ | jq
-# Get a fresh ID token in the web app console: await window._testGetToken(true)
+## Get a fresh ID token in the web app console: await window._testGetToken(true)
 curl -s https://<SERVICE_URL>/me -H "Authorization: Bearer <ID_TOKEN>" | jq
 
 B) Web -> Firebase Hosting
 
-# .env.production should contain the same Firebase values + VITE_API_BASE_URL
+## .env.production should contain the same Firebase values + VITE_API_BASE_URL
 cd miniapp/web
 npm run build
 firebase deploy --only hosting
 
 
-#Firestore Security Rules
+## Firestore Security Rules
 
 rules_version = '2';
 service cloud.firestore {
@@ -97,7 +85,7 @@ service cloud.firestore {
 }
 
 
-#Backend Security Notes
+## Backend Security Notes
 
 *Auth check: Every protected route uses Authorization: Bearer <Firebase ID token> and verifies with Firebase Admin (verifyIdToken). Tokens are audience/issuer bound to the Firebase project.
 *Public routes: / (and optionally /healthz) are public for health checks. Business routes like /me, /ping require a valid token.
