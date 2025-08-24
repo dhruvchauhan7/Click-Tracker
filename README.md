@@ -16,7 +16,6 @@ Tiny full-stack app demonstrating frontend, auth, tracking, backend, and deploym
 - **Web (Hosting):** https://click-tracker-eb57a.web.app/
 - **API (Cloud Run):** https://click-tracker-api-ux3oempsmq-uc.a.run.app
 
-> Replace with your actual URLs.
 
 ---
 
@@ -30,29 +29,27 @@ React (Vite) ──> Firebase Auth (client) ──> ID token
 └─ Express + Firebase Admin verifies ID token
 
 
-### Data model
-- `usage/{uid}`: `{ clickCount: number, updatedAt: timestamp }`
-
 ---
 
 ## Local Development
 
-### 1) Frontend
-```bash
+# Frontend
 cd miniapp/web
-cp .env.local.example .env.local  # if you keep an example file
-# .env.local values (example)
+npm install
+
+# Backend
+cd ../api
+npm install
+npm run dev
+
+Environment variables (Vite)
+
 # VITE_FIREBASE_API_KEY=...
 # VITE_FIREBASE_AUTH_DOMAIN=click-tracker-eb57a.firebaseapp.com
 # VITE_FIREBASE_PROJECT_ID=click-tracker-eb57a
 # VITE_FIREBASE_APP_ID=...
 # VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
-npm install
-npm run dev
 
-cd miniapp/api
-npm install
-npm run dev   # runs node index.js
 
 Deployment
 A) API → Cloud Run
@@ -86,13 +83,6 @@ cd miniapp/web
 npm run build
 firebase deploy --only hosting
 
-Environment Variables (Vite)
-Key	| Where |	Notes
-VITE_FIREBASE_API_KEY	.env.local / .env.production	public web API key (not a secret)
-VITE_FIREBASE_AUTH_DOMAIN	same	click-tracker-*.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID	same	must match Firebase/Cloud Run project
-VITE_FIREBASE_APP_ID	same	Firebase app id
-VITE_API_BASE_URL	same	your Cloud Run base URL
 
 Firestore Security Rules
 rules_version = '2';
@@ -108,27 +98,11 @@ service cloud.firestore {
 Backend Security Notes
 
 Auth check: Every protected route uses Authorization: Bearer <Firebase ID token> and verifies with Firebase Admin (verifyIdToken). Tokens are audience/issuer bound to the Firebase project.
-
 Public routes: / (and optionally /healthz) are public for health checks. Business routes like /me, /ping require a valid token.
-
 CORS: cors({ origin: true }) for simplicity in demo; restrict to your Hosting origin in production if desired.
-
 Least access: Firestore rules isolate per-user access to usage/{uid}.
-
 Secrets: No service account keys are committed. Cloud Run uses ADC (workload identity).
 
-
-Backend Security Notes
-
-Auth check: Every protected route uses Authorization: Bearer <Firebase ID token> and verifies with Firebase Admin (verifyIdToken). Tokens are audience/issuer bound to the Firebase project.
-
-Public routes: / (and optionally /healthz) are public for health checks. Business routes like /me, /ping require a valid token.
-
-CORS: cors({ origin: true }) for simplicity in demo; restrict to your Hosting origin in production if desired.
-
-Least access: Firestore rules isolate per-user access to usage/{uid}.
-
-Secrets: No service account keys are committed. Cloud Run uses ADC (workload identity).
 
 
 
