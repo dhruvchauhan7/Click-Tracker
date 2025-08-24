@@ -30,13 +30,16 @@ cd ../api
 npm install
 npm run dev
 
-Environment variables (Vite)
+## Environment variables (Vite)
 
-### VITE_FIREBASE_API_KEY=...
-### VITE_FIREBASE_AUTH_DOMAIN=click-tracker-eb57a.firebaseapp.com
-### VITE_FIREBASE_PROJECT_ID=click-tracker-eb57a
-### VITE_FIREBASE_APP_ID=...
-### VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
+
+**`.env.local`** (dev) and **`.env.production`** (build):
+```ini
+VITE_FIREBASE_API_KEY=YOUR_KEY
+VITE_FIREBASE_AUTH_DOMAIN=click-tracker-eb57a.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=click-tracker-eb57a
+VITE_FIREBASE_APP_ID=YOUR_APP_ID
+VITE_API_BASE_URL=https://click-tracker-api-ux3oempsmq-uc.a.run.app
 
 
 ## Deployment
